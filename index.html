@@ -79,24 +79,26 @@ input.file-input { position: fixed; left: -9999px; width: 1px; height: 1px; opac
 
 .body { display: flex; flex: 1; overflow: hidden; }
 
-.sidebar { width: 256px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-x: hidden; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; background: var(--surface); }
+.sidebar { width: 256px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-x: hidden; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; background: var(--surface); }
 .sidebar::-webkit-scrollbar { width: 3px; }
 .sidebar::-webkit-scrollbar-track { background: var(--surface); }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-.sep { height: 1px; background: var(--border); margin: 2px -14px; flex-shrink: 0; }
-.section-hd { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 6px; margin-bottom: 8px; }
-.tab-block { padding-bottom: 12px; margin-bottom: 4px; }
-body.ascii .ascii-tab-gap { margin-top: 10px; }
-.ascii-section { display: flex; flex-direction: column; gap: 12px; }
+.sep { height: 1px; background: var(--border); margin: 0 -14px; flex-shrink: 0; }
+.section-hd { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.tab-block { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; }
+.ascii-tab-gap { margin-top: 0; }
+.ascii-section { display: flex; flex-direction: column; gap: 14px; }
 .ascii-block { display: flex; flex-direction: column; gap: 14px; }
+.ascii-block .section-hd:not(:first-child) { margin-top: 6px; }
 
 .mode-tabs { display: flex; gap: 14px; }
 .tab { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted2); cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; transition: color .12s, border-color .12s; user-select: none; }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
 .tab:hover:not(.active) { color: var(--text); }
 
-.group { display: flex; flex-direction: column; gap: 15px; }
+.group { display: flex; flex-direction: column; gap: 14px; }
+.group .sep { margin-top: 2px; margin-bottom: 2px; }
 
 .ctrl-label { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted2); margin-bottom: 6px; }
 .ctrl-label .val { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--text); letter-spacing: 0; text-transform: none; }
@@ -135,6 +137,7 @@ input[type=color] { width: 26px; height: 22px; border: 1px solid var(--border2);
 .ascii-only { display: none; }
 body.ascii .dither-only { display: none; }
 body.ascii .ascii-only { display: block; }
+body.ascii .ascii-block { display: flex; }
 
 .canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; background: var(--bg); }
 .drop-zone { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; cursor: pointer; }
@@ -160,6 +163,9 @@ body.ascii .ascii-only { display: block; }
 .post-fx-row .toggle-row { margin-bottom: 0; }
 .post-fx-row .fx-amount { display: none; }
 .post-fx-row.on .fx-amount { display: block; }
+.post-fx-row .fx-amount { padding-top: 6px; }
+.post-fx-row .fx-amount .color-row + .ctrl-label { margin-top: 8px; }
+.post-fx-row .fx-amount .slider-wrap + select { margin-top: 6px; }
 #cropPosWrap { display: none; }
 .theme-toggle { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 8px; border: 1px solid var(--border2); background: var(--s2); color: var(--muted2); border-radius: var(--r); cursor: pointer; transition: border-color .12s, color .12s, background .12s; }
 .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
@@ -193,7 +199,7 @@ body.theme-light .spinner { background: rgba(244,239,228,.85); }
 
     <div class="tab-block">
       <div class="sep"></div>
-      <div class="mode-tabs" style="padding-top:9px;">
+      <div class="mode-tabs">
         <span class="tab active" data-mode="dither">Dither</span>
         <span class="tab" data-mode="ascii">ASCII</span>
       </div>
@@ -400,16 +406,15 @@ body.theme-light .spinner { background: rgba(244,239,228,.85); }
     </div>
 
     <div class="sep"></div>
-    <div class="sep"></div>
     <div class="section-hd">Post-Process</div>
     <div class="group">
       <div class="post-fx-row" data-fx="colorOverlay">
         <div class="toggle-row"><span class="lbl">Color Overlay</span><label class="switch"><input type="checkbox" id="fxColorOverlay"><span class="sw-track"></span></label></div>
         <div class="fx-amount">
-          <div class="color-row" style="margin-top:6px"><span class="color-tag">Color</span><input type="color" id="overlayColor" value="#ff6b35"></div>
-          <div class="ctrl-label" style="margin-top:8px">Opacity <span class="val" id="valOverlayOpacity">30</span></div>
+          <div class="color-row"><span class="color-tag">Color</span><input type="color" id="overlayColor" value="#ff6b35"></div>
+          <div class="ctrl-label">Opacity <span class="val" id="valOverlayOpacity">30</span></div>
           <div class="slider-wrap"><input type="range" id="overlayOpacity" min="0" max="100" value="30" step="1"></div>
-          <select id="overlayBlend" style="margin-top:6px">
+          <select id="overlayBlend">
             <option value="multiply">Overlay: Multiply</option>
             <option value="screen">Overlay: Screen</option>
             <option value="overlay">Overlay: Overlay</option>
@@ -445,7 +450,8 @@ body.theme-light .spinner { background: rgba(244,239,228,.85); }
         <div class="toggle-row"><span class="lbl">Chromatic / RGB Split</span><label class="switch"><input type="checkbox" id="fxChromatic"><span class="sw-track"></span></label></div>
         <div class="fx-amount"><div class="ctrl-label">Amount <span class="val" id="valChromatic">0</span></div><div class="slider-wrap"><input type="range" id="chromatic" min="0" max="100" value="0" step="1"></div></div>
       </div>
-    </div>    <div class="sep"></div>
+    </div>
+    <div class="sep"></div>
     <div class="section-hd">Video Export</div>
     <div class="group">
       <select id="recordFormat">
